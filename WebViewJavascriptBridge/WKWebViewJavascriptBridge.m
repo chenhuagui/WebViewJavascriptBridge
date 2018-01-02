@@ -190,7 +190,9 @@
     return NULL;
 }
 
-
+- (void)injectJavascriptFile {
+    [_base injectJavascriptFile];
+}
 
 @end
 

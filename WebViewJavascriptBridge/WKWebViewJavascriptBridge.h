@@ -29,6 +29,8 @@
 - (void)setWebViewDelegate:(id)webViewDelegate;
 - (void)disableJavscriptAlertBoxSafetyTimeout;
 
+- (void)injectJavascriptFile;
+
 @end
 
 #endif
