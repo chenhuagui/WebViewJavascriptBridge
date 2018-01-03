@@ -32,7 +32,7 @@ NSString * WebViewJavascriptBridge_js() {
 		_fetchQueue: _fetchQueue,
 		_handleMessageFromObjC: _handleMessageFromObjC
 	};
-
+        
 	var messagingIframe;
 	var sendMessageQueue = [];
 	var messageHandlers = {};
@@ -111,7 +111,7 @@ NSString * WebViewJavascriptBridge_js() {
                         handler(message.data, responseCallback);
                     }
                 } catch (e) {
-                    responseCallback();
+                    responseCallback && responseCallback({code:2,msg:e.message});
                 }
 			}
 		}
@@ -127,15 +127,12 @@ NSString * WebViewJavascriptBridge_js() {
 	document.documentElement.appendChild(messagingIframe);
 
 	registerHandler("_disableJavascriptAlertBoxSafetyTimeout", disableJavscriptAlertBoxSafetyTimeout);
-	
-	setTimeout(_callWVJBCallbacks, 0);
-	function _callWVJBCallbacks() {
-		var callbacks = window.WVJBCallbacks;
-		delete window.WVJBCallbacks;
-		for (var i=0; i<callbacks.length; i++) {
-			callbacks[i](WebViewJavascriptBridge);
-		}
-	}
+        
+    var doc = document;
+    var readyEvent = doc.createEvent('Events');
+    readyEvent.initEvent('WebViewJavascriptBridgeReady');
+    readyEvent.bridge = WebViewJavascriptBridge;
+    doc.dispatchEvent(readyEvent);
 })();
 	); // END preprocessorJSCode
 
